@@ -14,88 +14,85 @@ void citesteDateleDeIntrare();
 void determinaToateEchipele(int, int);
 int main()
 {
-    citesteDateleDeIntrare();
-    determinaToateEchipele(0, 0);
-    scrie.close();
-    return 0;
+	citesteDateleDeIntrare();
+	determinaToateEchipele(0, 0);
+	scrie.close();
+	return 0;
 }
 void afiseazaEchipa()
 {
-    for (int i = 0; i < nrEleviInEchipa; i++)
-    {
-        scrie << echipa[i] << ' ';
-    }
-    scrie << endl;
+	for (int i = 0; i < nrEleviInEchipa; i++)
+	{
+		scrie << echipa[i]+1 << ' ';
+	}
+	scrie << endl;
 }
 bool indeplinesteConditiaProblemei()
 {
-    // verifica daca pentru fiecare disciplina
-    // exista in echipa cel putin un membru
-    // care sa o studieze
-    bool uz[nrDiscipline];
-    memset(uz, 0, sizeof(uz));
-    int i, j;
-    for (i = 0; i < nrEleviInEchipa; i++)
-    {
-        for (j = 0; j < nrDiscipline; j++)
-        {
-            if (elev[i][j])
-            {
-                uz[j] = 1;
-            }
-        }
-    }
-    for (i = 0; i < nrDiscipline; i++)
-    {
-        if (uz[i] == 0)
-        {
-            return 0;
-        }
-    }
-    return 1;
+	// verifica daca pentru fiecare disciplina
+	// exista in echipa cel putin un membru
+	// care sa o studieze
+	bool uz[nrDiscipline];
+	memset(uz, 0, sizeof(uz));
+	int i, j;
+	for (i = 0; i < nrEleviInEchipa; i++)
+	{
+		for (j = 0; j < nrDiscipline; j++)
+		{
+			if (elev[echipa[i]][j])
+			{
+				uz[j] = 1;
+			}
+		}
+	}
+	for (i = 0; i < nrDiscipline; i++)
+	{
+		if (uz[i] == 0)
+		{
+			return 0;
+		}
+	}
+	return 1;
 }
 void determinaToateEchipele(
-    int nrOrdineElev,
-    int nrEleviAlesiPanaAcum)
+	int nrOrdineElev,
+	int nrEleviAlesiPanaAcum)
 {
-    scrie << nrOrdineElev << ' ' << nrEleviAlesiPanaAcum << endl;
-    echipa[nrEleviAlesiPanaAcum] = nrOrdineElev;
-    if (nrEleviAlesiPanaAcum == nrEleviInEchipa)
-    {
-        scrie << "verifica sol" << endl;
-        afiseazaEchipa();
-        /*if (indeplinesteConditiaProblemei())
-        {
-            afiseazaEchipa();
-        }*/
-    }
-    else
-    {
-        scrie << "cauta sol" << endl;
-        for (int i = nrOrdineElev+1; i < nrElevi; i++)
-        {
-            determinaToateEchipele(
-                i,
-                nrEleviAlesiPanaAcum+1);
-        }
-    }
+	if (nrEleviAlesiPanaAcum == nrEleviInEchipa)
+	{
+		if (indeplinesteConditiaProblemei())
+		{
+			afiseazaEchipa();
+		}
+	}
+	else
+	{
+		for (int i = nrOrdineElev; i < nrElevi; i++)
+		{
+			echipa[nrEleviAlesiPanaAcum] = i;
+			determinaToateEchipele(
+				i+1,
+				nrEleviAlesiPanaAcum+1);
+		}
+	}
 }
 void citesteDateleDeIntrare()
 {
-    ifstream citeste("pluricex.in");
-    citeste >> nrElevi
-            >> nrEleviInEchipa
-            >> nrDiscipline;
-    for (int i = 0; i < nrElevi; i++)
-    {
-        int nrDisciplineStudiate;
-        citeste >> nrDisciplineStudiate;
-        for (int j = 0; j < nrDisciplineStudiate; j++)
-        {
-            int disciplina;
-            citeste >> disciplina;
-            elev[i][disciplina] = 1;
-        }
-    }
-    citeste.close();
+	ifstream citeste("pluricex.in");
+	citeste >> nrElevi
+		>> nrEleviInEchipa
+		>> nrDiscipline;
+	for (int i = 0; i < nrElevi; i++)
+	{
+		int nrDisciplineStudiate;
+		citeste >> nrDisciplineStudiate;
+		for (int j = 0; j < nrDisciplineStudiate; j++)
+		{
+			int disciplina;
+			citeste >> disciplina;
+			disciplina--; // retin indicii de la 0
+			elev[i][disciplina] = 1;
+		}
+	}
+	citeste.close();
 }
